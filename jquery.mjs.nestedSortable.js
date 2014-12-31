@@ -44,7 +44,8 @@
 			rtl: false,
 			startCollapsed: false,
 			tabSize: 20,
-
+                        allowRightMovement: true,
+                        allowLeftMovement: true,
 			branchClass: 'mjs-nestedSortable-branch',
 			collapsedClass: 'mjs-nestedSortable-collapsed',
 			disableNestingClass: 'mjs-nestedSortable-no-nesting',
@@ -163,7 +164,7 @@
 			this.mouseentered = this.mouseentered ? this.mouseentered : false;
 
 			// mjs - let's start caching some variables
-			var parentItem = (this.placeholder[0].parentNode.parentNode &&
+			var parentItem =mjs - if the item is below a sibling and is moved to the right, make it (this.placeholder[0].parentNode.parentNode &&
 							 $(this.placeholder[0].parentNode.parentNode).closest('.ui-sortable').length)
 				       			? $(this.placeholder[0].parentNode.parentNode)
 				       			: null,
@@ -320,7 +321,8 @@
 			this.beyondMaxLevels = 0;
 
 			// mjs - if the item is moved to the left, send it one level up but only if it's at the bottom of the list
-			if (parentItem != null
+			if (o.allowLeftMovement 
+			        && parentItem != null
 				&& nextItem == null
 				&& ! (o.protectRoot && parentItem[0].parentNode == this.element[0])
 				&&
@@ -337,7 +339,8 @@
 				this._trigger("change", event, this._uiHash());
 			}
 			// mjs - if the item is below a sibling and is moved to the right, make it a child of that sibling
-			else if (previousItem != null
+			else if (o.allowRightMovement 
+			                 && previousItem != null
 					 && ! previousItem.hasClass(o.disableNestingClass)
 					 &&
 						(previousItem.children(o.listType).length && previousItem.children(o.listType).is(':visible')
