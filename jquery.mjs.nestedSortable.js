@@ -264,6 +264,17 @@
 			childLevels = this._getChildLevels(this.helper);
 			newList = document.createElement(o.listType);
 
+      var expandItem = function() {
+        return window.setTimeout(function() {
+          $(itemElement)
+          .removeClass(o.collapsedClass)
+          .addClass(o.expandedClass);
+
+            self.refreshPositions();
+            self._trigger("expand", event, self._uiHash());
+        }, o.expandOnHover);
+      };
+
 			//Rearrange
 			for (i = this.items.length - 1; i >= 0; i--) {
 
@@ -334,14 +345,7 @@
 					if (o.isTree && $(itemElement).hasClass(o.collapsedClass) && o.expandOnHover) {
 						if (!this.hovering) {
 							$(itemElement).addClass(o.hoveringClass);
-							this.hovering = window.setTimeout(function() {
-								$(itemElement)
-									.removeClass(o.collapsedClass)
-									.addClass(o.expandedClass);
-
-								self.refreshPositions();
-								self._trigger("expand", event, self._uiHash());
-							}, o.expandOnHover);
+							this.hovering = expandItem();
 						}
 					}
 
@@ -387,10 +391,6 @@
 									$(itemElement).children(o.listType);
 								}
 
-								if (a[0] !== undefined) {
-									this._rearrange(event, null, a);
-								}
-
 							} else {
 								this._rearrange(event, item);
 							}
@@ -420,7 +420,7 @@
 				}
 			}.call(this));
 
-			if (previousItem != null) {
+			if (previousItem) {
 				while (
 					previousItem[0].nodeName.toLowerCase() !== "li" ||
 					previousItem[0].className.indexOf(o.disabledClass) !== -1 ||
@@ -447,7 +447,7 @@
 				}
 			}.call(this));
 
-			if (nextItem != null) {
+			if (nextItem) {
 				while (
 					nextItem[0].nodeName.toLowerCase() !== "li" ||
 					nextItem[0].className.indexOf(o.disabledClass) !== -1 ||
@@ -467,9 +467,8 @@
 
 			// mjs - if the item is moved to the left, send it one level up
 			// but only if it's at the bottom of the list
-			if (parentItem != null &&
-				nextItem == null &&
-				o.protectRoot && parentItem[0].parentNode !== this.element[0] &&
+			if (parentItem && !nextItem &&
+				!(o.protectRoot && parentItem[0].parentNode === this.element[0]) &&
 				(
 					o.rtl &&
 					(
@@ -479,12 +478,13 @@
 					) ||
 					!o.rtl && (this.positionAbs.left < parentItem.offset().left)
 				)
+
 			) {
 
 				parentItem.after(this.placeholder[0]);
 				helperIsNotSibling = !parentItem
 											.children(o.listItem)
-											.children("li:visible:not(.ui-sortable-helper")
+											.children("li:visible:not(.ui-sortable-helper)")
 											.length;
 				if (o.isTree && helperIsNotSibling) {
 					parentItem
@@ -494,9 +494,10 @@
 
 				this._clearEmpty(parentItem[0]);
 				this._trigger("change", event, this._uiHash());
+
 				// mjs - if the item is below a sibling and is moved to the right,
 				// make it a child of that sibling
-			} else if (previousItem != null &&
+			} else if (previousItem &&
 				!previousItem.hasClass(o.disableNestingClass) &&
 				(
 					previousItem.children(o.listType).length &&
@@ -595,7 +596,7 @@
 		// to make it easier to hover over a collapsed element and have it expand
 		_intersectsWithSides: function(item) {
 
-			var half = this.options.isTree ? .8 : .5,
+			var half = this.options.isTree ? 0.8 : 0.5,
 				isOverBottomHalf = isOverAxis(
 					this.positionAbs.top + this.offset.click.top,
 					item.top + (item.height * half),
