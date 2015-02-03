@@ -467,9 +467,8 @@
 
 			// mjs - if the item is moved to the left, send it one level up
 			// but only if it's at the bottom of the list
-			if (parentItem != null &&
-				nextItem == null &&
-				o.protectRoot && parentItem[0].parentNode !== this.element[0] &&
+			if (parentItem && !nextItem &&
+				!(o.protectRoot && parentItem[0].parentNode === this.element[0]) &&
 				(
 					o.rtl &&
 					(
@@ -479,6 +478,7 @@
 					) ||
 					!o.rtl && (this.positionAbs.left < parentItem.offset().left)
 				)
+
 			) {
 
 				parentItem.after(this.placeholder[0]);
@@ -494,9 +494,10 @@
 
 				this._clearEmpty(parentItem[0]);
 				this._trigger("change", event, this._uiHash());
+
 				// mjs - if the item is below a sibling and is moved to the right,
 				// make it a child of that sibling
-			} else if (previousItem != null &&
+			} else if (previousItem &&
 				!previousItem.hasClass(o.disableNestingClass) &&
 				(
 					previousItem.children(o.listType).length &&
