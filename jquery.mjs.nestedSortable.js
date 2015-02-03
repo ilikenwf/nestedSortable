@@ -424,7 +424,7 @@
 				}
 			}.call(this));
 
-			if (previousItem != null) {
+			if (previousItem) {
 				while (
 					previousItem[0].nodeName.toLowerCase() !== "li" ||
 					previousItem[0].className.indexOf(o.disabledClass) !== -1 ||
@@ -451,7 +451,7 @@
 				}
 			}.call(this));
 
-			if (nextItem != null) {
+			if (nextItem) {
 				while (
 					nextItem[0].nodeName.toLowerCase() !== "li" ||
 					nextItem[0].className.indexOf(o.disabledClass) !== -1 ||
@@ -600,7 +600,7 @@
 		// to make it easier to hover over a collapsed element and have it expand
 		_intersectsWithSides: function(item) {
 
-			var half = this.options.isTree ? .8 : .5,
+			var half = this.options.isTree ? 0.8 : 0.5,
 				isOverBottomHalf = isOverAxis(
 					this.positionAbs.top + this.offset.click.top,
 					item.top + (item.height * half),
