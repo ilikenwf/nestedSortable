@@ -264,6 +264,17 @@
 			childLevels = this._getChildLevels(this.helper);
 			newList = document.createElement(o.listType);
 
+      var expandItem = function() {
+        return window.setTimeout(function() {
+          $(itemElement)
+          .removeClass(o.collapsedClass)
+          .addClass(o.expandedClass);
+
+            self.refreshPositions();
+            self._trigger("expand", event, self._uiHash());
+        }, o.expandOnHover);
+      };
+
 			//Rearrange
 			for (i = this.items.length - 1; i >= 0; i--) {
 
@@ -334,14 +345,7 @@
 					if (o.isTree && $(itemElement).hasClass(o.collapsedClass) && o.expandOnHover) {
 						if (!this.hovering) {
 							$(itemElement).addClass(o.hoveringClass);
-							this.hovering = window.setTimeout(function() {
-								$(itemElement)
-									.removeClass(o.collapsedClass)
-									.addClass(o.expandedClass);
-
-								self.refreshPositions();
-								self._trigger("expand", event, self._uiHash());
-							}, o.expandOnHover);
+							this.hovering = expandItem();
 						}
 					}
 
