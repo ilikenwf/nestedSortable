@@ -391,10 +391,6 @@
 									$(itemElement).children(o.listType);
 								}
 
-								if (a[0] !== undefined) {
-									this._rearrange(event, null, a);
-								}
-
 							} else {
 								this._rearrange(event, item);
 							}
