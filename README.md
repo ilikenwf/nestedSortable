@@ -27,30 +27,30 @@ Also:
 
 ## Usage
 
-```
+```html
 <ol class="sortable">
-	<li><div>Some content</div></li>
-	<li>
-		<div>Some content</div>
-		<ol>
-			<li><div>Some sub-item content</div></li>
-			<li><div>Some sub-item content</div></li>
-		</ol>
-	</li>
-	<li><div>Some content</div></li>
+    <li><div>Some content</div></li>
+    <li>
+        <div>Some content</div>
+        <ol>
+            <li><div>Some sub-item content</div></li>
+            <li><div>Some sub-item content</div></li>
+        </ol>
+    </li>
+    <li><div>Some content</div></li>
 </ol>
 ```
 
-```
-	$(document).ready(function(){
+```javascript
+$(document).ready(function(){
 
-		$('.sortable').nestedSortable({
-			handle: 'div',
-			items: 'li',
-			toleranceElement: '> div'
-		});
+    $('.sortable').nestedSortable({
+        handle: 'div',
+        items: 'li',
+        toleranceElement: '> div'
+    });
 
-	});
+});
 ```
 
 Please note: every `<li>` must have either one or two direct children, the first one being a container element (such as `<div>` in the above example), and the (optional) second one being the nested list. The container element has to be set as the 'toleranceElement' in the options, and this, or one of its children, as the 'handle'.
